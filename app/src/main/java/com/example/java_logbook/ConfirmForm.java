@@ -3,39 +3,29 @@ package com.example.java_logbook;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ConfirmForm extends AppCompatActivity {
-    public static final String NAME_KEY = "name";
-    public static final String PROPERTY_KEY = "property";
-    public static final String ROOM_KEY = "room";
-    public static final String FURNITURE_KEY = "furniture";
-    public static final String PRICE_KEY = "price";
-    public static final String NOTE_KEY = "note";
-    public static final String DATE_KEY = "date";
+    private String _name, _property, _room, _furniture, _date, _price, _note;
 
-    private DocumentReference documentReference = FirebaseFirestore.getInstance().document("blogs/data");
+    private FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        this.firebaseFirestore = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
         Intent i = getIntent();
@@ -59,50 +49,41 @@ public class ConfirmForm extends AppCompatActivity {
             intent.putExtra("data", modelData);
             startActivity(intent);
         });
-    }
-    public void saveBlog(View view)
-    {
-        EditText nameView = (EditText) findViewById(R.id.Name);
-        Spinner propertyView = (Spinner) findViewById(R.id.Property);
-        Spinner roomView = (Spinner) findViewById(R.id.Room);
-        Spinner furnitureView = (Spinner) findViewById(R.id.Furniture);
-        EditText priceView = (EditText) findViewById(R.id.Price);
-        EditText noteView = (EditText) findViewById(R.id.Notes);
-        TextView dateView = (TextView) findViewById(R.id.Date);
 
-        String nameText = nameView.getText().toString();
-        String propertyText = propertyView.getSelectedItem().toString();
-        String roomText = roomView.getSelectedItem().toString();
-        String furnitureText = furnitureView.getSelectedItem().toString();
-        String priceText = priceView.getText().toString();
-        String noteText = noteView.getText().toString();
-        String dateText = dateView.getText().toString();
-
-        if (nameText.isEmpty() || propertyText.isEmpty() ||
-                roomText.isEmpty() || furnitureText.isEmpty() ||
-                priceText.isEmpty() || noteText.isEmpty() || dateText.isEmpty()) {
-            return;
-        }
-        Map<String, Object> dataSave = new HashMap<String, Object>();
-        dataSave.put(NAME_KEY, nameText);
-        dataSave.put(PROPERTY_KEY, propertyText);
-        dataSave.put(ROOM_KEY, roomText);
-        dataSave.put(FURNITURE_KEY, furnitureText);
-        dataSave.put(PRICE_KEY, priceText);
-        dataSave.put(NOTE_KEY, noteText);
-        dataSave.put(DATE_KEY, dateText);
-        documentReference.set(dataSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Button submit = findViewById(R.id.SubmitData);
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(Void unused) {
-                Log.d("blogs" ,"Saved!");
+            public void onClick(View view) {
+
+                _name = modelData.getName();
+                _property = modelData.getPropertyType();
+                _room = modelData.getRoom();
+                _furniture = modelData.getFurnitureType();
+                _price = modelData.getPrice();
+                _date = modelData.getDate();
+                _note = modelData.getNotes();
+
+                addDataToFirestore(modelData);
+
+            }
+        });
+    }
+    private void addDataToFirestore(ModelData modelData) {
+
+
+        CollectionReference dbBlogs = firebaseFirestore.collection("feedback");
+
+
+        dbBlogs.add(modelData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(ConfirmForm.this, "Your Course has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w("blogs", "Not Saved!", e);
+                Toast.makeText(ConfirmForm.this, "Fail to add course \n" + e, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }

@@ -24,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:onClick="saveBlog"
         android:text="Confirm"
         app:backgroundTint="#FF03DAC5"
         app:layout_constraintEnd_toEndOf="parent"

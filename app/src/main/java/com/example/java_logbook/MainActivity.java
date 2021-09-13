@@ -23,7 +23,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button submitData;
+    Button submitData, viewData;
     EditText name, notes, price;
     TextView dateTime;
     Spinner propertyType, furnitureType, room;
@@ -236,6 +236,17 @@ public class MainActivity extends AppCompatActivity {
                 confirmScreen(view);
             }
         });
+
+        viewData = findViewById(R.id.viewPost);
+        viewData.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,ViewPost.class);
+                startActivity(i);
+            }
+        });
+
+
     }
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy";
@@ -249,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
     {
         if (name.length() <= 0)
         {
-            name.setError("Doume may nhap ten zo");
+            name.setError("Name is Required!");
             return false;
         }
         if(propertyType.getSelectedItem().toString().equals("Select one Property"))
