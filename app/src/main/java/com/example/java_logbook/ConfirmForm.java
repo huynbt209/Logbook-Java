@@ -77,7 +77,7 @@ public class ConfirmForm extends AppCompatActivity {
         dbBlogs.add(modelData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(ConfirmForm.this, "Your Course has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmForm.this, "Your Submit has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

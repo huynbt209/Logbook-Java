@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner propertyType, furnitureType, room;
     boolean validation = false;
     final Calendar calendar = Calendar.getInstance();
-    ModelData modelData;
+    ModelData model;
 
 
     @Override
@@ -42,66 +42,62 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         // Set property list
-        final ArrayList<String> getPropertyList = new ArrayList<>();
-        getPropertyList.add("Select one Property");
-        getPropertyList.add("Flat House");
-        getPropertyList.add("Apartment");
-        getPropertyList.add("Farm");
-        getPropertyList.add("Building");
+        final ArrayList<String> listProperty = new ArrayList<>();
+        listProperty.add("Select one Property");
+        listProperty.add("Flat House");
+        listProperty.add("Apartment");
+        listProperty.add("Farm");
+        listProperty.add("Building");
         //set room list
-        final ArrayList<String> roomList = new ArrayList<>();
-        roomList.add("Select one Room");
-        roomList.add("Single Room");
-        roomList.add("Double Room");
-        roomList.add("Studio Room");
+        final ArrayList<String> listRoom = new ArrayList<>();
+        listRoom.add("Select one Room");
+        listRoom.add("Single Room");
+        listRoom.add("Double Room");
+        listRoom.add("Studio Room");
         //set furniture list
-        final ArrayList<String> furnitureList = new ArrayList<>();
-        furnitureList.add("Select one Furniture");
-        furnitureList.add("Furnished");
-        furnitureList.add("Unfurnished");
-        furnitureList.add("Part Furnished");
+        final ArrayList<String> listFurniture = new ArrayList<>();
+        listFurniture.add("Select one Furniture");
+        listFurniture.add("Furnished");
+        listFurniture.add("Unfurnished");
+        listFurniture.add("Part Furnished");
 
-        modelData = intent.getSerializableExtra("data") == null ? new ModelData() :
+        model = intent.getSerializableExtra("data") == null ? new ModelData() :
                 (ModelData) intent.getSerializableExtra("data");
         String formatDate = "dd/MM/yyyy";
         SimpleDateFormat time = new SimpleDateFormat(formatDate, Locale.UK);
-        modelData.setDate(time.format(new Date()));
+        model.setDate(time.format(new Date()));
         //Name
         name = findViewById(R.id.Name);
-        name.setText(modelData.getName());
+        name.setText(model.getName());
         name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int ii, int iii) {
             }
-
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int ii, int iii) {
                 if(charSequence.length() == 0){
                     name.setError("Name is required!");
                 }
                 else {
-                    modelData.setName(name.getText().toString());
+                    model.setName(name.getText().toString());
                 }
             }
-
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) { }
         });
         //Property
         propertyType = findViewById(R.id.Property);
         ArrayAdapter<String> properAdapter = new ArrayAdapter<>(MainActivity.this,
-                R.layout.support_simple_spinner_dropdown_item, getPropertyList);
+                R.layout.support_simple_spinner_dropdown_item, listProperty);
         properAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         propertyType.setAdapter(properAdapter);
-        propertyType.setSelection(modelData.getPropertyType().equals(" ") ? 0 :
-                getPropertyList.indexOf(modelData.getPropertyType()));
+        propertyType.setSelection(model.getPropertyType().equals(" ") ? 0 :
+                listProperty.indexOf(model.getPropertyType()));
         propertyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String propertySelected = getPropertyList.get(i);
-                modelData.setPropertyType(propertySelected);
+                String propertySelected = listProperty.get(i);
+                model.setPropertyType(propertySelected);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView){
@@ -111,15 +107,15 @@ public class MainActivity extends AppCompatActivity {
         //Room
         room = findViewById(R.id.Room);
         ArrayAdapter<String> roomAdapter = new ArrayAdapter<>(MainActivity.this,
-                R.layout.support_simple_spinner_dropdown_item, roomList);
+                R.layout.support_simple_spinner_dropdown_item, listRoom);
         roomAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         room.setAdapter(roomAdapter);
-        room.setSelection(modelData.getRoom().equals(" ") ? 0 : roomList.indexOf(modelData.getRoom()));
+        room.setSelection(model.getRoom().equals(" ") ? 0 : listRoom.indexOf(model.getRoom()));
         room.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String roomSelected = roomList.get(i);
-                modelData.setRoom(roomSelected);
+                String roomSelected = listRoom.get(i);
+                model.setRoom(roomSelected);
             }
 
             @Override
@@ -131,19 +127,19 @@ public class MainActivity extends AppCompatActivity {
         //Furniture
         furnitureType = findViewById(R.id.Furniture);
         ArrayAdapter<String> furAdapter = new ArrayAdapter<>(MainActivity.this,
-                R.layout.support_simple_spinner_dropdown_item, furnitureList);
+                R.layout.support_simple_spinner_dropdown_item, listFurniture);
         furAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         furnitureType.setAdapter(furAdapter);
-        furnitureType.setSelection(modelData.getFurnitureType().equals(" ") ? 0 : furnitureList.indexOf(modelData.getFurnitureType()));
+        furnitureType.setSelection(model.getFurnitureType().equals(" ") ? 0 : listFurniture.indexOf(model.getFurnitureType()));
         furnitureType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String furSelected = furnitureList.get(i);
+                String furSelected = listFurniture.get(i);
                 if(furSelected.equals("Select One!")){
-                    modelData.setFurnitureType(" ");
+                    model.setFurnitureType(" ");
                 }
                 else {
-                    modelData.setFurnitureType(furSelected);
+                    model.setFurnitureType(furSelected);
                 }
             }
 
@@ -154,15 +150,15 @@ public class MainActivity extends AppCompatActivity {
         });
         //Price
         price = findViewById(R.id.Price);
-        price.setText(String.valueOf(modelData.getPrice()));
+        price.setText(String.valueOf(model.getPrice()));
         price.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int ii, int iii) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int ii, int iii) {
                 if(charSequence.length()==0){
                     price.setError("Price is required!");
                 }
@@ -175,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     price.setError("Doume nhap ngu vl");
                 }
                 else {
-                    modelData.setPrice(price.getText().toString());
+                    model.setPrice(price.getText().toString());
                 }
             }
 
@@ -187,14 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Notes
         notes = findViewById(R.id.Notes);
-        notes.setText(modelData.getNotes());
+        notes.setText(model.getNotes());
         notes.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int ii, int iii) {
 
             }
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int ii, int iii) {
                 if(charSequence.length() > 500){
                     notes.setError("The maximum length are 500!");
                 }
@@ -202,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     notes.setError("Please input your notes!");
                 }
                 else {
-                    modelData.setNotes(notes.getText().toString());
+                    model.setNotes(notes.getText().toString());
                 }
             }
             @Override
@@ -213,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Date
         dateTime = findViewById(R.id.Date);
-        dateTime.setText(modelData.getDate());
+        dateTime.setText(model.getDate());
         Button pickDate = findViewById(R.id.pickDate);
         DatePickerDialog.OnDateSetListener dateTime = (view, year, monthOfYear, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
@@ -253,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         dateTime.setText(sdf.format(calendar.getTime()));
-        modelData.setDate(sdf.format(calendar.getTime()));
+        model.setDate(sdf.format(calendar.getTime()));
     }
 
     private boolean validationSubmit()
@@ -300,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
         if(validation)
         {
             Intent i = new Intent(MainActivity.this, ConfirmForm.class);
-            i.putExtra("data", modelData);
+            i.putExtra("data", model);
             startActivity(i);
         }
     }
